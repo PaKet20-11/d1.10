@@ -41,13 +41,17 @@ def create_task(name, column_name):
 
 def create_column(name):
     board_id = "615e09bbe590c90ea9cdeb0a"
-    requests.post(base_url.format('lists'), data={'name': name, 'idBoard': board_id, **auth_params})
+    column_data = requests.get(base_url.format('boards') + '/' + board_id + '/lists', params=auth_params).json()
+    for column in column_data:
+        if column['name'] == name:
+            print("Данное имя уже использовано!")
+            break
+        else:
+            requests.post(base_url.format('lists'), data={'name': name, 'idBoard': board_id, **auth_params})
 
 
 def move(name, column_name):
     column_data = requests.get(base_url.format('boards') + '/' + board_id + '/lists', params=auth_params).json()
-
-    choose_task=None
 
     task_id=None
 
